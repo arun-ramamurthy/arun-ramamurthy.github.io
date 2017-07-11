@@ -200,7 +200,7 @@ graphFeature(featss[3])
 ```
 
 ***
-```{r, fig.height=10, fig.width=15, out.width="500px", echo = F, results = "hide", warning=F, message=F}
+```{r, fig.height=10, fig.width=20, echo = F, results = "hide", warning=F, message=F}
 ggthemr_reset()
 graphFeature(featss[4])
 ```
