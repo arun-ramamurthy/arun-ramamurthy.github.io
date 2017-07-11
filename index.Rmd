@@ -182,11 +182,11 @@ graphFeature <- function(feature = "Nuclear Energy Consumption PPPD (kWh)")
 {
   bp %>% filter_(paste(ticker(feature), ">", 0)) %>%
     ggplot(aes_string(x = ticker(feature), y = "`Carbon Intensity of Energy Processes (kg/kWh)`", col = "Country")) + geom_jitter(alpha = .3) + geom_smooth(col = "black") +
-    theme(legend.position = "none") + labs(title = paste("Importance of ", feature, " for deep decarbonization."))
+    theme(legend.position = "none") + labs(title = paste("Importance of ", feature %>% str_extract("\\w+"), " for deep decarbonization."))
 }
 #l_ply(.fun = graphFeature, paste(feats, "Energy Consumption PPPD (kWh)"), .progress = 'text', .print = T)
 featss <- paste(feats, "Energy Consumption PPPD (kWh)")
-graphFeature(featss[1])
+graphFeature(featss[1]) + gg
 ```
 
 ***
