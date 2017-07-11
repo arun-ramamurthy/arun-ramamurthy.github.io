@@ -15,6 +15,8 @@ bootstrap:
 widgets     : [shiny, interactive, iframe]       
 mode        : selfcontained 
 knit        : slidify::knit2slides
+width: 1920
+height: 1080
 ---
 # Deep Decarbonization 
 ## Unpacking what it takes to save the environment.
@@ -103,7 +105,7 @@ Sounds great, doesn't it?
 ## Error: Your data requires 59 colours but the swatch provided by ggthemr only has 8. To resolve this you can provide an appropriate vector of colours to your scale or expand the swatch using set_swatch(). Note: if you are using a custom palette, the first swatch colour is separate from the others. See the documentation for define_palette() and/or set_swatch()
 ```
 
-![plot of chunk unnamed-chunk-10](assets/fig/unnamed-chunk-10-1.png)
+<img src="assets/fig/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="1920px" height="1080px" />
 
 ***
 

@@ -15,6 +15,8 @@ bootstrap:
 widgets     : [shiny, interactive, iframe]       
 mode        : selfcontained 
 knit        : slidify::knit2slides
+width: 1920
+height: 1080
 ---
 # Deep Decarbonization 
 ## Unpacking what it takes to save the environment.
@@ -173,7 +175,7 @@ ggthemr_reset()
 ### Fortunately, we have hundreds of case studies on various energy systems!
 
 ***
-```{r, echo = F, results = "hide", warning=F, message=F, fig.height=7, fig.width=10}
+```{r, echo = F, results = "hide", warning=F, message=F, fig.height=7, fig.width=10, out.width="1920px",out.height="1080px"}
 ggthemr_reset()
 feats = c("Hydro", "Nuclear", "Wind", "Solar")
 graphFeature <- function(feature = "Nuclear Energy Consumption PPPD (kWh)")
