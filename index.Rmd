@@ -173,7 +173,7 @@ ggthemr_reset()
 ### Fortunately, we have hundreds of case studies on various energy systems!
 
 ***
-```{r, fig.height=6, fig.width=10, echo = F, results = "hide", warning=F, message=F}
+```{r, echo = F, results = "hide", warning=F, message=F, fig.height=7, fig.width=10}
 ggthemr_reset()
 feats = c("Hydro", "Nuclear", "Wind", "Solar")
 graphFeature <- function(feature = "Nuclear Energy Consumption PPPD (kWh)")
