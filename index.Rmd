@@ -1,0 +1,206 @@
+---
+title       : Deep Decarbonization
+subtitle    : Unpacking what it takes to save the environment.
+author      : Arun Ramamurthy
+job         : Environmental Progress
+framework   : revealjs      
+hitheme     : zenburn
+revealjs:
+  theme     : solarized
+  transition: linear
+  incremental: "true"
+  center    : "true"
+bootstrap:
+  theme     : amelia
+widgets     : [shiny, interactive, iframe]       
+mode        : selfcontained 
+knit        : slidify::knit2slides
+---
+# Deep Decarbonization 
+## Unpacking what it takes to save the environment.
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style type="text/css">
+body {background-color:transparent;}
+</style>
+---
+A study by Environmental Progress
+
+<i> Arun Ramamurthy </i>
+
+```{r, echo = F}
+library(lubridate);library(rvest);library(ggmap);library(jsonlite);library(dplyr);library(ggthemr);library(webshot);library(imager); library(stringr);library(magrittr);library(plotly);library(rvest);library(readxl);library(tidyr);library(htmlwidgets)
+Sys.setenv("plotly_api_key"="6p7AWMFqXUSPQM5KFkxu")
+Sys.setenv("plotly_username"="arun-ramamurthy")
+
+pW = 800
+pH = 600
+
+`%notin%` = function(x,y) !(x %in% y)
+isnt.na = function(x){! is.na(x)}
+ticker <- function(str) (paste0("`", str, "`"))
+rmse = function(y, y_hat = 0) {sqrt(sum((y - y_hat)^2)/length(y))}
+mae = function(y, y_hat = 0) {sum(abs(y - y_hat)) / length(y)}
+unindex = function(df) {rownames(df) <- c(); return(df)}
+is.emptyset = function(v){length(v) == 0}
+pcaChecker <- function(pca.model, original.data) {predict(pca.model) %>% cbind(original.data, .)}
+pad <- function(v, newLength, padding = NA) {v[newLength] <- padding; v}
+ggfilter <- function(condition){function(d) {d %>% filter_(condition)}}
+
+bp <- readRDS("~/Desktop/WORKSHOP/D/DATA/EP/Decarbonization/BP_FULL_MOD")
+bp_global <- 
+  bp %>% filter(Year <= 2015) %>% group_by(Year) %>% summarise(`Total CO2 Emissions (Billion Tonnes)` = sum(`CO2 Emissions (MMT)`, na.rm = T) / 1000,
+                                    `Total Energy Consumption (Thousand TWh)` = sum(`Energy Consumption (TWh)`, na.rm = T) / 1000,
+                                    `Population (Billions)` = sum(`Population (Millions)`, na.rm = T) / 1000,
+                                    GWP = sum(GDP, na.rm = T)) %>%
+  mutate(`Carbon Intensity of Global Energy Processes (kg/kWh)` = `Total CO2 Emissions (Billion Tonnes)` / `Total Energy Consumption (Thousand TWh)`,
+         `Carbon Intensity of Global Economy (kg/$)` = `Total CO2 Emissions (Billion Tonnes)` / GWP * 1e12) 
+frame_dur = 200
+buffer_dur = 10
+easing_op = "sin"
+ggthemr("flat", layout = "clear", spacing = 1)
+```
+
+--- &vertical
+# The Motivation
+
+***
+## The Background
+With climate change as apparent as ever, world leaders have all come together to place some goals ...
+
+***
+In Korea, <p class="fragment grow"> <span style="color:green; font-weight:bold"> ... 314 fewer MMT CO2 emitted per year by 2030 </span> </p>
+
+In the US,  <p class="fragment grow"> <span style="color:green; font-weight:bold"> ... 200 fewer MMT CO2 emitted per year by 2030 </span> </p>
+
+In France,  <p class="fragment grow"> <span style="color:green; font-weight:bold"> ... 353kg fewer CO2 emitted per year by 2050 </span> </p>
+
+ 
+<p class = "fragment fade-in"> 
+<i style="color:darkred"> 
+Sounds great, doesn't it? 
+</i>
+</p>
+
+--- &vertical
+## The Problem
+```{r, echo = F, fig.width=10, fig.height=7}
+ggthemr("dust", layout = "clear", spacing = 1)
+bp %>% group_by(Year) %>% summarise(`Total CO2 Emissions (Billion Tonnes)` = sum(`CO2 Emissions (MMT)`, na.rm = T) / 1000,
+                                    `Total Energy Consumption (TWh)` = sum(`Energy Consumption (TWh)`, na.rm = T)) %>%
+  ggplot(aes(Year, `Total CO2 Emissions (Billion Tonnes)`)) + geom_area(alpha = .7) + geom_line(size = 2, col = "black") + ggtitle("Global Carbon Emissions", subtitle =  "*have definitely been rising")
+```
+
+***
+### And even when accounting for energy use... 
+```{r, echo = F, results = "hide", warning=F, message=F}
+ggthemr("dust", layout = "clear", spacing = 1)
+(bp %>% group_by(Year) %>% summarise(`Total CO2 Emissions (Billion Tonnes)` = sum(`CO2 Emissions (MMT)`, na.rm = T) / 1000,
+                                    `Total Energy Consumption (Thousand TWh)` = sum(`Energy Consumption (TWh)`, na.rm = T) / 1000) %>%
+  ggplot(aes(`Total CO2 Emissions (Billion Tonnes)`, `Total Energy Consumption (Thousand TWh)`)) + geom_point(size = 1, alpha = .4) + geom_point(size = 4, aes(frame = Year)) +
+  ggtitle("CO2 Emissions and Energy Consumption", subtitle =  "Note the clear relationship")) %>% ggplotly(width = pW, height =pH) %>% animation_opts(frame = frame_dur + buffer_dur, transition = frame_dur, easing = easing_op, redraw = F) %>% api_create(x = ., filename = "clear_relationship") %$% web_url -> a
+```
+<iframe width="900" height="800" seamless src=`r a`></iframe>
+
+***
+### We haven't gotten much better at that either.
+```{r, echo = F, fig.width=10, fig.height=7, eval = T}
+bp_global %>%
+  ggplot(aes(Year, `Carbon Intensity of Global Energy Processes (kg/kWh)`)) + geom_line(size = 2) + ylim(low = 0, high = .3) + ggtitle("Global Carbon Efficiency", subtitle =  "of Energy Processes")
+```
+
+***
+## The Solutions
+<img src="https://therationalpessimist.files.wordpress.com/2013/02/kaya-identity-jpg.jpg" alt="Kaya">
+
+--- &vertical
+### Now, how do we make our electricity and energy more carbon-efficient? 
+<p class = "fragment fade-in"> But first, a detour in what the rest of the world is up to... </p>
+
+***
+```{r, echo = F, results = "hide", warning=F, message=F}
+ggthemr("pale")
+bigEight = c("China", "Japan", "United States", "France", "Germany", "Sweden", "South Korea", "Canada")
+(bp %>% filter(Country %in% bigEight, Country %notin% c()) %>% 
+        ggplot(aes(`Carbon Intensity of Economy (kg/$)`, `GDP per Capita` , col = Country)) + 
+        labs(title = "Wealthy countries use less carbon for the dollar.") + theme(legend.position = "none") +
+        geom_point(size = .5, alpha = .3) + geom_point(aes(frame = Year, ids = Country), na.rm = T)) %>%
+  ggplotly(width = pW, height =pH) %>% animation_opts(frame = frame_dur + buffer_dur, transition = frame_dur, easing = easing_op, redraw = F) %>% api_create(x = ., filename = "carbon_dollars") %$% web_url -> a
+```
+<iframe width="900" height="800" seamless src=`r a`></iframe>
+
+***
+```{r, echo = F, results = "hide", warning=F, message=F}
+(bp %>% filter(Country %in% bigEight, Country %notin% c()) %>% 
+        ggplot(aes(`Energy Intensity of Economy (kWh/$)`, `GDP per Capita` , col = Country)) +
+        labs(title = "Wealthy countries use less energy* for the dollar.") + theme(legend.position = "none") +
+        geom_point(size = .5, alpha = .3) + geom_point(aes(frame = Year, ids = Country), na.rm = T)) %>% 
+  ggplotly(width = pW, height =pH) %>% animation_opts(frame = frame_dur + buffer_dur, transition = frame_dur, easing = easing_op, redraw = F) %>% api_create(x = ., filename = "energy_dollars") %$% web_url -> a
+```
+<iframe width="900" height="800" seamless src=`r a`></iframe>
+
+***
+```{r, echo = F, results = "hide", warning=F, message=F}
+(bp %>% filter(Country %in% bigEight, Country %notin% c()) %>% 
+        ggplot(aes(`Carbon Intensity of Energy Processes (kg/kWh)`, `GDP per Capita` , col = Country)) + 
+        labs(title = "And here we see the policies.") + theme(legend.position = "none") +
+        geom_point(size = 1, alpha = .4) + geom_point(size = 2, aes(frame = Year, ids = Country), na.rm = T)) %>% 
+   ggplotly(width = pW, height =pH) %>% animation_opts(frame = frame_dur + buffer_dur, transition = frame_dur, easing = easing_op, redraw = F) %>% api_create(x = ., filename = "see_policies") %$% web_url -> a
+```
+<iframe width="900" height="800" seamless src=`r a`></iframe>
+
+--- &vertical
+### So, different countries clearly have different energy policies. Let's evaluate them.
+
+***
+```{r, fig.width=10, fig.height=8, echo = F, results = "hide", warning=F, message=F}
+ggthemr_reset()
+plotPeaks()
+```
+
+***
+```{r, echo = F, results = "hide", warning=F, message=F}
+ggthemr_reset()
+(decarb %>% 
+    ggplot(aes(`Average Annual Increase over Buildup (kWh)`, `Average Annual Change Rate in Carbon Intensity of Energy Processes (kg/kWh) during Peak Buildup`, col = `Buildup Type`, label = Country)) +  
+    theme(legend.position = "bottom") +  labs(title = "Decarbonization by Technology") +
+    geom_jitter(size = 1, alpha = .6)  + geom_smooth(formula = y ~ poly(x, 2), size = 1.3, se = F, method = "lm")) %>% 
+   ggplotly(width = pW, height =pH) %>% animation_opts(frame = frame_dur + buffer_dur, transition = frame_dur, easing = easing_op, redraw = F) %>% api_create(x = ., filename = "decarb_techs") %$% web_url -> a
+```
+<iframe width="900" height="800" seamless src=`r a`></iframe>
+
+--- &vertical
+## Nuclear and Hydro seem to pull countries towards decarbonization
+### Fortunately, we have hundreds of case studies on various energy systems!
+
+***
+```{r, echo = F, results = "hide", warning=F, message=F}
+ggthemr_reset()
+feats = c("Hydro", "Nuclear", "Wind", "Solar")
+graphFeature <- function(feature = "Nuclear Energy Consumption PPPD (kWh)")
+{
+  bp %>% filter_(paste(ticker(feature), ">", 0)) %>%
+    ggplot(aes_string(x = ticker(feature), y = "`Carbon Intensity of Energy Processes (kg/kWh)`", col = "Country")) + geom_jitter(alpha = .3) + geom_smooth(col = "black") +
+    theme(legend.position = "none") + labs(title = paste("Importance of ", feature, " for deep decarbonization."))
+}
+#l_ply(.fun = graphFeature, paste(feats, "Energy Consumption PPPD (kWh)"), .progress = 'text', .print = T)
+featss <- paste(feats, "Energy Consumption PPPD (kWh)")
+graphFeature(featss[1])
+```
+
+***
+```{r, echo = F, results = "hide", warning=F, message=F}
+ggthemr_reset()
+graphFeature(featss[2])
+```
+
+***
+```{r, echo = F, results = "hide", warning=F, message=F}
+ggthemr_reset()
+graphFeature(featss[3])
+```
+
+***
+```{r, echo = F, results = "hide", warning=F, message=F}
+ggthemr_reset()
+graphFeature(featss[4])
+```
