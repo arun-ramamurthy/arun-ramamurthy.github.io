@@ -107,4 +107,9 @@ Sounds great, doesn't it?
 ![plot of chunk unnamed-chunk-12](assets/fig/unnamed-chunk-12-1.png)
 
 ***
-![plot of chunk unnamed-chunk-13](assets/fig/unnamed-chunk-13-1.png)
+
+```
+## Error: Your data requires 66 colours but the swatch provided by ggthemr only has 8. To resolve this you can provide an appropriate vector of colours to your scale or expand the swatch using set_swatch(). Note: if you are using a custom palette, the first swatch colour is separate from the others. See the documentation for define_palette() and/or set_swatch()
+```
+
+<img src="assets/fig/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="500px" />
